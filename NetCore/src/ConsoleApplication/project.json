@@ -1,13 +1,11 @@
 {
   "version": "1.0.0-*",
   "buildOptions": {
-    "emitEntryPoint": true,
-    "preserveCompilationContext": true,
-    "warningsAsErrors": true
+    "emitEntryPoint": true
   },
 
   "dependencies": {
-    "Library": "1.0.0-*",
+    "ConsoleApplicationLibrary": "1.0.0-*",
     "Microsoft.NETCore.App": {
       "type": "platform",
       "version": "1.0.0"

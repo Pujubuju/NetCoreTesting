@@ -10,7 +10,8 @@ namespace CalcApp
             try
             {
                 StringCalculator calculator = new StringCalculator();
-                Console.WriteLine(calculator.Add(args[0], args[1]));
+                Console.WriteLine(calculator.Add("2", "6"));
+                Console.ReadLine();
             }
             catch (Exception)
             {
