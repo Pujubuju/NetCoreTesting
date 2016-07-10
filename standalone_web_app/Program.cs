@@ -13,6 +13,7 @@ namespace ConsoleApplication
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseKestrel()
                 .UseStartup<Startup>()
                 .Build();
@@ -49,11 +50,32 @@ namespace ConsoleApplication
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseMvc();
+            app.UseDeveloperExceptionPage();
+
+            app.Use(async (context, next) =>
+            {
+                Console.WriteLine(context.Request.Path);
+                await next();
+            });
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync(
+                    "Hello World. The Time is: " +
+                    DateTime.Now.ToString("hh:mm:ss tt"));
+
+            });
         }
     }
 
-    public class HelloWorldController
+    public class HelloWorldController : Controller
     {
         [HttpGet("api/helloworld")]
         public object HelloWorld()
@@ -63,6 +85,14 @@ namespace ConsoleApplication
                 message = "Hello World",
                 time = DateTime.Now
             };
+        }
+
+        [HttpGet("helloworld")]
+        public ActionResult Helloworld()
+        {
+            ViewBag.Message = "Hello world!";
+            ViewBag.Time = DateTime.Now;
+            return View("helloworld");
         }
     }
 }
