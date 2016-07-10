@@ -22,13 +22,21 @@ namespace ConsoleApplication
     public class Startup
     {
         public void Configure(IApplicationBuilder app)
-        {            
+        {
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Pre Processing request from: ");
+                await context.Response.WriteAsync(context.Connection.LocalIpAddress.ToString());
+                await next();
+                await context.Response.WriteAsync(" Post Processing. Done.");
+            });
+
             app.Run(async (context) =>
             {
                 await context.Response.WriteAsync(
-                    "Hello World. The Time is: " + 
+                    "Hello World. The Time is: " +
                     DateTime.Now.ToString("hh:mm:ss tt"));
-                                                               
+
             });
         }
     }
